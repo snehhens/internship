@@ -1,0 +1,21 @@
+<ion-content>
+
+  <ion-input
+    placeholder="Email"
+    [(ngModel)]="form.email">
+  </ion-input>
+
+  <ion-input
+    placeholder="Enter OTP"
+    [(ngModel)]="form.otp">
+  </ion-input>
+
+  <ion-button
+    expand="block"
+    (click)="verifyOtp()">
+
+    Verify OTP
+
+  </ion-button>
+
+</ion-content>
