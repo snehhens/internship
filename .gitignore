@@ -1,2 +1,22 @@
-node_modules
+# Node modules
+node_modules/
+
+# Environment variables
 .env
+
+# Angular cache
+.angular/
+
+# Build folders
+dist/
+
+# Logs
+logs
+*.log
+
+# VS Code settings
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
