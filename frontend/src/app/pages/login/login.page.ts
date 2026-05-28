@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth';
 import { Router } from '@angular/router';
+import { LoginData } from 'src/app/interfaces/auth.interface';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class LoginPage {
 
-  form = {
+  form: LoginData = {
     email: '',
     password: ''
   };

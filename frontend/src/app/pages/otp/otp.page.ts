@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth';
 import { Router } from '@angular/router';
+import { VerifyOtpData } from 'src/app/interfaces/auth.interface';
 
 @Component({
   selector: 'app-otp',
@@ -10,21 +11,21 @@ import { Router } from '@angular/router';
 })
 export class OtpPage {
 
-  form = {
+  form: VerifyOtpData = {
     email: '',
     otp: ''
   };
 
   constructor(
-  private auth: AuthService,
-  private router: Router
-  ) {}
+    private auth: AuthService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
 
     const savedEmail = localStorage.getItem("email");
 
-    if(savedEmail) {
+    if (savedEmail) {
       this.form.email = savedEmail;
     }
 
@@ -33,13 +34,13 @@ export class OtpPage {
   verifyOtp() {
 
     this.auth.verifyOtp(this.form)
-    .subscribe((res:any) => {
+      .subscribe((res: any) => {
 
-      console.log(res);
+        console.log(res);
 
-      this.router.navigate(['/password']);
+        this.router.navigate(['/password']);
 
-    });
+      });
 
   }
 
