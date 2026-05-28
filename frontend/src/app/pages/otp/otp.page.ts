@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth';
 import { Router } from '@angular/router';
-import { VerifyOtpData } from 'src/app/interfaces/auth.interface';
+import { VerifyOtpData, AuthResponse } from 'src/app/interfaces/auth.interface';
 
 @Component({
   selector: 'app-otp',
@@ -32,9 +32,9 @@ export class OtpPage {
   }
 
   verifyOtp() {
-
+    console.log(this.form);
     this.auth.verifyOtp(this.form)
-      .subscribe((res: any) => {
+      .subscribe((res: AuthResponse) => {
 
         console.log(res);
 

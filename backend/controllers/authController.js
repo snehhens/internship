@@ -51,7 +51,7 @@ exports.verifyOtp = async (req, res) => {
       });
     }
 
-    if (user.otp !== otp) {
+    if (String(user.otp) !== String(otp)) {
       return res.status(400).json({
         message: "Invalid OTP"
       });
@@ -68,7 +68,7 @@ exports.verifyOtp = async (req, res) => {
   } catch (error) {
     res.status(500).json(error);
   }
-};  
+};
 
 
 exports.createPassword = async (req, res) => {

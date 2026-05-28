@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth';
-import { RegisterData } from 'src/app/interfaces/auth.interface';
+import { RegisterData, RegisterResponse } from 'src/app/interfaces/auth.interface';
 
 @Component({
   selector: 'app-register',
@@ -24,7 +24,7 @@ export class RegisterPage {
   register() {
 
     this.auth.register(this.form)
-      .subscribe((res: any) => {
+      .subscribe((res: RegisterResponse) => {
 
         console.log(res);
 

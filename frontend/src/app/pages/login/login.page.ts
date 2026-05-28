@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth';
 import { Router } from '@angular/router';
 import { LoginData } from 'src/app/interfaces/auth.interface';
+import { LoginResponse } from 'src/app/interfaces/auth.interface';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +25,7 @@ export class LoginPage {
   login() {
 
     this.auth.login(this.form)
-      .subscribe((res: any) => {
+      .subscribe((res: LoginResponse) => {
 
         console.log(res);
 
@@ -32,7 +33,7 @@ export class LoginPage {
 
         localStorage.setItem(
           "profileCompleted",
-          res.profileCompleted
+          String(res.profileCompleted)
         );
 
         if (res.profileCompleted) {

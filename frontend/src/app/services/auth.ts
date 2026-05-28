@@ -7,6 +7,12 @@ import {
   LoginData
 } from '../interfaces/auth.interface';
 
+import {
+  RegisterResponse,
+  AuthResponse,
+  LoginResponse
+} from '../interfaces/auth.interface';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,19 +23,31 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   register(data: RegisterData) {
-    return this.http.post(`${this.api}/register`, data);
+    return this.http.post<RegisterResponse>(
+      `${this.api}/register`,
+      data
+    );
   }
 
   verifyOtp(data: VerifyOtpData) {
-    return this.http.post(`${this.api}/verify-otp`, data);
+    return this.http.post<AuthResponse>(
+      `${this.api}/verify-otp`,
+      data
+    );
   }
 
   createPassword(data: PasswordData) {
-    return this.http.post(`${this.api}/create-password`, data);
+    return this.http.post<AuthResponse>(
+      `${this.api}/create-password`,
+      data
+    );
   }
 
   login(data: LoginData) {
-    return this.http.post(`${this.api}/login`, data);
+    return this.http.post<LoginResponse>(
+      `${this.api}/login`,
+      data
+    );
   }
 }
 

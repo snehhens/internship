@@ -17,3 +17,18 @@ export interface LoginData {
   email: string;
   password: string;
 }
+
+export interface AuthResponse {
+  message: string;
+}
+
+export interface RegisterResponse {
+  message: string;
+  otp: string;
+}
+
+export interface LoginResponse {
+  message: string;
+  token: string;
+  profileCompleted: boolean;
+}
