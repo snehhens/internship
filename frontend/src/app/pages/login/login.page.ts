@@ -1,8 +1,18 @@
-import { Component } from '@angular/core';
-import { AuthService } from 'src/app/services/auth';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+
+import {
+  FormBuilder,
+  FormGroup,
+  Validators
+} from '@angular/forms';
+
 import { Router } from '@angular/router';
-import { LoginData } from 'src/app/interfaces/auth.interface';
-import { LoginResponse } from 'src/app/interfaces/auth.interface';
+
+import { AuthService }
+from 'src/app/services/auth';
 
 @Component({
   selector: 'app-login',
@@ -10,39 +20,100 @@ import { LoginResponse } from 'src/app/interfaces/auth.interface';
   styleUrls: ['./login.page.scss'],
   standalone: false,
 })
-export class LoginPage {
 
-  form: LoginData = {
-    email: '',
-    password: ''
-  };
+export class LoginPage implements OnInit {
+
+  loginForm!: FormGroup;
+
+  loading = false;
+
+  errorMessage = '';
+
+  showPassword = false;
 
   constructor(
+    private fb: FormBuilder,
     private auth: AuthService,
     private router: Router
-  ) { }
+  ) {}
+
+  ngOnInit() {
+
+    this.loginForm = this.fb.group({
+
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.email
+        ]
+      ],
+
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(6)
+        ]
+      ]
+
+    });
+
+  }
 
   login() {
 
-    this.auth.login(this.form)
-      .subscribe((res: LoginResponse) => {
+    if(this.loginForm.invalid) {
 
-        console.log(res);
+      this.loginForm.markAllAsTouched();
 
-        localStorage.setItem("token", res.token);
+      return;
 
-        localStorage.setItem(
-          "profileCompleted",
-          String(res.profileCompleted)
-        );
+    }
 
-        if (res.profileCompleted) {
+    this.loading = true;
 
-          this.router.navigate(['/home']);
+    this.errorMessage = '';
 
-        } else {
+    this.auth
+      .login(this.loginForm.value)
+      .subscribe({
 
-          this.router.navigate(['/profile']);
+        next: (res:any) => {
+
+          console.log(res);
+
+          localStorage.setItem(
+            'token',
+            res.token
+          );
+
+          localStorage.setItem(
+            'profileCompleted',
+            res.profileCompleted
+          );
+
+          this.loading = false;
+
+          if(res.profileCompleted) {
+
+            this.router.navigate(['/home']);
+
+          } else {
+
+            this.router.navigate(['/profile']);
+
+          }
+
+        },
+
+        error: (err) => {
+
+          this.loading = false;
+
+          this.errorMessage =
+            err.error.message ||
+            'Invalid credentials';
 
         }
 

@@ -1,7 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/services/auth';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  AbstractControl,
+  ValidationErrors
+} from '@angular/forms';
+
 import { Router } from '@angular/router';
-import { PasswordData } from 'src/app/interfaces/auth.interface';
+
+import { AuthService }
+from 'src/app/services/auth';
 
 @Component({
   selector: 'app-password',
@@ -9,36 +22,126 @@ import { PasswordData } from 'src/app/interfaces/auth.interface';
   styleUrls: ['./password.page.scss'],
   standalone: false,
 })
+
 export class PasswordPage implements OnInit {
 
-  form: PasswordData = {
-    email: '',
-    password: ''
-  };
+  passwordForm!: FormGroup;
+
+  loading = false;
+
+  errorMessage = '';
+
+  showPassword = false;
+
+  showConfirmPassword = false;
 
   constructor(
+    private fb: FormBuilder,
     private auth: AuthService,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit() {
 
-    const savedEmail = localStorage.getItem("email");
+    const savedEmail =
+      localStorage.getItem('email');
 
-    if (savedEmail) {
-      this.form.email = savedEmail;
+    this.passwordForm = this.fb.group({
+
+      email: [
+        savedEmail || ''
+      ],
+
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(6)
+        ]
+      ],
+
+      confirmPassword: [
+        '',
+        [
+          Validators.required
+        ]
+      ]
+
+    }, {
+      validators: this.passwordMatchValidator
+    });
+
+  }
+
+  passwordMatchValidator(
+    form: AbstractControl
+  ): ValidationErrors | null {
+
+    const password =
+      form.get('password')?.value;
+
+    const confirmPassword =
+      form.get('confirmPassword')?.value;
+
+    if(password !== confirmPassword) {
+
+      return {
+        passwordMismatch: true
+      };
+
     }
+
+    return null;
 
   }
 
   createPassword() {
 
-    this.auth.createPassword(this.form)
-      .subscribe((res: any) => {
+    if(this.passwordForm.invalid) {
 
-        console.log(res);
+      this.passwordForm.markAllAsTouched();
 
-        this.router.navigate(['/login']);
+      return;
+
+    }
+
+    this.loading = true;
+
+    this.errorMessage = '';
+
+    const payload = {
+
+      email:
+        this.passwordForm.value.email,
+
+      password:
+        this.passwordForm.value.password
+
+    };
+
+    this.auth
+      .createPassword(payload)
+      .subscribe({
+
+        next: (res:any) => {
+
+          console.log(res);
+
+          this.loading = false;
+
+          this.router.navigate(['/login']);
+
+        },
+
+        error: (err) => {
+
+          this.loading = false;
+
+          this.errorMessage =
+            err.error.message ||
+            'Something went wrong';
+
+        }
 
       });
 
