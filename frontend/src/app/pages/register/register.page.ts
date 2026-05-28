@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth';
+import { RegisterData } from 'src/app/interfaces/auth.interface';
 
 @Component({
   selector: 'app-register',
@@ -10,7 +11,7 @@ import { AuthService } from 'src/app/services/auth';
 })
 export class RegisterPage {
 
-  form = {
+  form: RegisterData = {
     email: '',
     role: ''
   };
@@ -18,20 +19,20 @@ export class RegisterPage {
   constructor(
     private auth: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
   register() {
 
     this.auth.register(this.form)
-    .subscribe((res:any) => {
+      .subscribe((res: any) => {
 
-      console.log(res);
+        console.log(res);
 
-      localStorage.setItem("email", this.form.email);
+        localStorage.setItem("email", this.form.email);
 
-      this.router.navigate(['/otp']);
+        this.router.navigate(['/otp']);
 
-    });
+      });
 
   }
 
