@@ -9,4 +9,6 @@ router.post("/create-password", authController.createPassword);
 
 router.post("/login", authController.login);
 
+router.post("/resend-otp", authController.resendOtp);
+
 module.exports = router;

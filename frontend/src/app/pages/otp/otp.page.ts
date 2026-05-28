@@ -32,13 +32,41 @@ export class OtpPage {
   }
 
   verifyOtp() {
+
     console.log(this.form);
+
     this.auth.verifyOtp(this.form)
-      .subscribe((res: AuthResponse) => {
+      .subscribe({
+
+        next: (res: AuthResponse) => {
+
+          console.log(res);
+
+          alert(res.message);
+
+          this.router.navigate(['/password']);
+
+        },
+
+        error: (err: any) => {
+
+          console.log("Backend Error:", err.error.message);
+
+          alert(err.error.message);
+
+        }
+
+      });
+
+  }
+
+  resendOtp() {
+
+    this.auth
+      .resendOtp(this.form.email)
+      .subscribe((res: any) => {
 
         console.log(res);
-
-        this.router.navigate(['/password']);
 
       });
 

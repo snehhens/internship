@@ -17,11 +17,13 @@ exports.register = async (req, res) => {
     }
 
     const otp = Math.floor(1000 + Math.random() * 9000).toString();
+    const otpExpires = new Date(Date.now() + 5 * 60 * 1000);
 
     const user = new User({
       email,
       role,
       otp,
+      otpExpires,
       isVerified: false
     });
 
@@ -51,6 +53,15 @@ exports.verifyOtp = async (req, res) => {
       });
     }
 
+
+    if (new Date() > user.otpExpires) {
+
+      return res.status(400).json({
+        message: "OTP Expired"
+      });
+
+    }
+
     if (String(user.otp) !== String(otp)) {
       return res.status(400).json({
         message: "Invalid OTP"
@@ -70,6 +81,47 @@ exports.verifyOtp = async (req, res) => {
   }
 };
 
+exports.resendOtp = async (req, res) => {
+
+  try {
+
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+
+      return res.status(404).json({
+        message: "User not found"
+      });
+
+    }
+
+    const otp = Math.floor(
+      1000 + Math.random() * 9000
+    ).toString();
+
+    const otpExpires =
+      new Date(Date.now() + 5 * 60 * 1000);
+
+    user.otp = otp;
+
+    user.otpExpires = otpExpires;
+
+    await user.save();
+
+    res.json({
+      message: "OTP Resent Successfully",
+      otp
+    });
+
+  } catch (error) {
+
+    res.status(500).json(error);
+
+  }
+
+};
 
 exports.createPassword = async (req, res) => {
 

@@ -4,6 +4,7 @@ const userSchema = new mongoose.Schema({
   email: {type: String, required: true, unique: true},
   role: String,
   otp: String,
+  otpExpires: Date,
   isVerified: {
     type: Boolean,
     default: false

@@ -36,6 +36,15 @@ export class AuthService {
     );
   }
 
+  resendOtp(email: string) {
+
+    return this.http.post(
+      `${this.api}/resend-otp`,
+      { email }
+    );
+
+  }
+
   createPassword(data: PasswordData) {
     return this.http.post<AuthResponse>(
       `${this.api}/create-password`,
