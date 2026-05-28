@@ -1,7 +1,18 @@
-import { Component } from '@angular/core';
-import { AuthService } from 'src/app/services/auth';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+
+import {
+  FormBuilder,
+  FormGroup,
+  Validators
+} from '@angular/forms';
+
 import { Router } from '@angular/router';
-import { VerifyOtpData, AuthResponse } from 'src/app/interfaces/auth.interface';
+
+import { AuthService }
+from 'src/app/services/auth';
 
 @Component({
   selector: 'app-otp',
@@ -9,50 +20,84 @@ import { VerifyOtpData, AuthResponse } from 'src/app/interfaces/auth.interface';
   styleUrls: ['./otp.page.scss'],
   standalone: false,
 })
-export class OtpPage {
 
-  form: VerifyOtpData = {
-    email: '',
-    otp: ''
-  };
+export class OtpPage implements OnInit {
+
+  otpForm!: FormGroup;
+
+  loading = false;
+
+  errorMessage = '';
+
+  timer = 30;
+
+  resendDisabled = true;
 
   constructor(
+    private fb: FormBuilder,
     private auth: AuthService,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit() {
 
-    const savedEmail = localStorage.getItem("email");
+    const savedEmail =
+      localStorage.getItem('email');
 
-    if (savedEmail) {
-      this.form.email = savedEmail;
-    }
+    this.otpForm = this.fb.group({
+
+      email: [
+        savedEmail || ''
+      ],
+
+      otp: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(4)
+        ]
+      ]
+
+    });
+
+    this.startTimer();
 
   }
 
   verifyOtp() {
 
-    console.log(this.form);
+    if(this.otpForm.invalid) {
 
-    this.auth.verifyOtp(this.form)
+      this.otpForm.markAllAsTouched();
+
+      return;
+
+    }
+
+    this.loading = true;
+
+    this.errorMessage = '';
+
+    this.auth
+      .verifyOtp(this.otpForm.value)
       .subscribe({
 
-        next: (res: AuthResponse) => {
+        next: (res:any) => {
 
           console.log(res);
 
-          alert(res.message);
+          this.loading = false;
 
           this.router.navigate(['/password']);
 
         },
 
-        error: (err: any) => {
+        error: (err) => {
 
-          console.log("Backend Error:", err.error.message);
+          this.loading = false;
 
-          alert(err.error.message);
+          this.errorMessage =
+            err.error.message || 'Invalid OTP';
 
         }
 
@@ -62,13 +107,46 @@ export class OtpPage {
 
   resendOtp() {
 
-    this.auth
-      .resendOtp(this.form.email)
-      .subscribe((res: any) => {
+    if(this.resendDisabled) return;
 
-        console.log(res);
+    const email =
+      this.otpForm.value.email;
+
+    this.auth
+      .resendOtp(email)
+      .subscribe({
+
+        next: (res:any) => {
+
+          console.log(res);
+
+          this.startTimer();
+
+        }
 
       });
+
+  }
+
+  startTimer() {
+
+    this.timer = 30;
+
+    this.resendDisabled = true;
+
+    const interval = setInterval(() => {
+
+      this.timer--;
+
+      if(this.timer <= 0) {
+
+        clearInterval(interval);
+
+        this.resendDisabled = false;
+
+      }
+
+    }, 1000);
 
   }
 

@@ -440,3 +440,96 @@ ion-alert.custom-role-alert {
 
   font-weight: 600;
 }
+
+/* ========================================
+   OTP
+======================================== */
+
+.otp-wrapper {
+
+  display: flex;
+
+  justify-content: center;
+
+  margin:
+    20px 0 28px;
+}
+
+ion-input-otp {
+
+  --border-radius: 18px;
+
+  --border-color: #d8b4fe;
+
+  --highlight-color-focused: #8b5cf6;
+
+  --background:
+    rgba(255,255,255,0.85);
+
+  --color: #0f172a;
+
+  color: #0f172a;
+
+  min-height: 58px;
+}
+
+/* OTP INPUT BOXES */
+
+ion-input-otp input {
+
+  color: #0f172a !important;
+
+  font-size: 22px !important;
+
+  font-weight: 600 !important;
+
+  text-align: center !important;
+
+  background:
+    rgba(255,255,255,0.9) !important;
+
+  border-radius: 18px !important;
+
+  border:
+    1.5px solid #d8b4fe !important;
+
+  width: 58px !important;
+
+  height: 58px !important;
+
+  margin: 0 6px !important;
+
+  transition: 0.25s ease;
+}
+
+ion-input-otp input:focus {
+
+  border-color: #8b5cf6 !important;
+
+  box-shadow:
+    0 0 0 4px rgba(168,85,247,0.10) !important;
+
+  outline: none !important;
+}
+
+/* RESEND */
+
+.otp-resend {
+
+  text-align: center;
+
+  margin-top: 22px;
+
+  font-size: 14px;
+
+  color: #64748b;
+}
+
+.resend-active {
+
+  color: #7c3aed;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
