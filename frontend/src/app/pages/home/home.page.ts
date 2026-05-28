@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-
 import { AuthService }
-from 'src/app/services/auth';
+  from 'src/app/services/auth';
+import { Router } from '@angular/router';  
+
+ 
 
 @Component({
   selector: 'app-home',
@@ -12,20 +14,28 @@ from 'src/app/services/auth';
 
 export class HomePage implements OnInit {
 
-  user:any;
+  user: any;
 
-  constructor(private auth: AuthService) {}
+  constructor(private auth: AuthService, private router: Router) { }
+
+  logout() {
+
+    localStorage.clear();
+
+    this.router.navigate(['/login']);
+
+  }
 
   ngOnInit() {
 
     this.auth.getProfile()
-    .subscribe((res:any) => {
+      .subscribe((res: any) => {
 
-      console.log(res);
+        console.log(res);
 
-      this.user = res;
+        this.user = res;
 
-    });
+      });
 
   }
 

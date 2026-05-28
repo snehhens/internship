@@ -1,13 +1,215 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>profile</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content fullscreen>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">profile</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="auth-container">
+
+    <div class="auth-card">
+
+      <div class="auth-logo">
+        P
+      </div>
+
+      <h1 class="auth-title">
+        Complete Profile
+      </h1>
+
+      <p class="auth-subtitle">
+
+        Finish setting up your
+        account
+
+      </p>
+
+      <form [formGroup]="profileForm">
+
+        <!-- EMAIL -->
+
+        <label class="auth-label">
+          Email
+        </label>
+
+        <ion-item
+          lines="none"
+          class="auth-input">
+
+          <ion-input
+            readonly="true"
+            formControlName="email">
+          </ion-input>
+
+        </ion-item>
+
+        <!-- CONTACT -->
+
+        <label class="auth-label">
+          Contact Number
+        </label>
+
+        <ion-item
+          lines="none"
+          class="auth-input">
+
+          <ion-input
+            type="tel"
+            placeholder="Enter contact number"
+            formControlName="contactNumber">
+
+          </ion-input>
+
+        </ion-item>
+
+        <p
+          class="auth-error"
+          *ngIf="
+          profileForm.get('contactNumber')?.touched &&
+          profileForm.get('contactNumber')?.invalid
+          ">
+
+          Enter valid 10 digit number
+
+        </p>
+
+        <!-- USERNAME -->
+
+        <label class="auth-label">
+          Username
+        </label>
+
+        <ion-item
+          lines="none"
+          class="auth-input">
+
+          <ion-input
+            placeholder="Enter username"
+            formControlName="username">
+
+          </ion-input>
+
+        </ion-item>
+
+        <p
+          class="auth-error"
+          *ngIf="
+          profileForm.get('username')?.touched &&
+          profileForm.get('username')?.invalid
+          ">
+
+          Username must be at least 3 characters
+
+        </p>
+
+        <!-- BIO -->
+
+        <label class="auth-label">
+          Bio
+        </label>
+
+        <ion-item
+          lines="none"
+          class="auth-input auth-textarea">
+
+          <ion-textarea
+            rows="4"
+            placeholder="Tell us about yourself"
+            formControlName="bio">
+
+          </ion-textarea>
+
+        </ion-item>
+
+        <p
+          class="auth-error"
+          *ngIf="
+          profileForm.get('bio')?.touched &&
+          profileForm.get('bio')?.invalid
+          ">
+
+          Bio must be at least 10 characters
+
+        </p>
+
+        <!-- INSTAGRAM -->
+
+        <label class="auth-label">
+          Instagram
+        </label>
+
+        <ion-item
+          lines="none"
+          class="auth-input">
+
+          <ion-input
+            placeholder="Instagram username"
+            formControlName="instagram">
+
+          </ion-input>
+
+        </ion-item>
+
+        <!-- FOLLOWERS -->
+
+        <label class="auth-label">
+          Followers
+        </label>
+
+        <ion-item
+          lines="none"
+          class="auth-input">
+
+          <ion-input
+            type="number"
+            placeholder="Enter followers"
+            formControlName="followers">
+
+          </ion-input>
+
+        </ion-item>
+
+        <p
+          class="auth-error"
+          *ngIf="
+          profileForm.get('followers')?.touched &&
+          profileForm.get('followers')?.invalid
+          ">
+
+          Enter valid followers count
+
+        </p>
+
+        <!-- BACKEND ERROR -->
+
+        <p
+          class="auth-error"
+          *ngIf="errorMessage">
+
+          {{ errorMessage }}
+
+        </p>
+
+        <!-- BUTTON -->
+
+        <ion-button
+          expand="block"
+          class="auth-button"
+          [disabled]="loading"
+          (click)="saveProfile()">
+
+          <ion-spinner
+            *ngIf="loading"
+            name="crescent">
+          </ion-spinner>
+
+          <span *ngIf="!loading">
+
+            Save Profile
+
+          </span>
+
+        </ion-button>
+
+      </form>
+
+    </div>
+
+  </div>
+
 </ion-content>

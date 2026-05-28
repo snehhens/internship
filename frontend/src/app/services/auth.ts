@@ -74,6 +74,18 @@ export class AuthService {
     );
 
   }
+
+  completeProfile(data: any) {
+
+    return this.http.post(
+
+      'http://localhost:5000/api/profile/complete-profile',
+
+      data
+
+    );
+
+  }
 }
 
 
