@@ -1,9 +1,21 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
+const { validationResult } = require("express-validator");
 
 
 exports.register = async (req, res) => {
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+
+    return res.status(400).json({
+      errors: errors.array()
+    });
+
+  }
+
   try {
 
     const { email, role } = req.body;
@@ -11,13 +23,19 @@ exports.register = async (req, res) => {
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      return res.status(400).json({
+
+      return res.status(409).json({
         message: "User already exists"
       });
+
     }
 
-    const otp = Math.floor(1000 + Math.random() * 9000).toString();
-    const otpExpires = new Date(Date.now() + 5 * 60 * 1000);
+    const otp = Math.floor(
+      1000 + Math.random() * 9000
+    ).toString();
+
+    const otpExpires =
+      new Date(Date.now() + 5 * 60 * 1000);
 
     const user = new User({
       email,
@@ -29,14 +47,21 @@ exports.register = async (req, res) => {
 
     await user.save();
 
-    res.json({
+    return res.status(201).json({
       message: "Registered Successfully",
       otp
     });
 
   } catch (error) {
-    res.status(500).json(error);
+
+    console.log(error);
+
+    return res.status(500).json({
+      message: "Internal Server Error"
+    });
+
   }
+
 };
 
 exports.verifyOtp = async (req, res) => {
@@ -202,6 +227,25 @@ exports.login = async (req, res) => {
 
   } catch (error) {
     res.status(500).json(error);
+  }
+
+};
+
+
+exports.getProfile = async (req, res) => {
+
+  try {
+
+    const user = await User.findById(
+      req.user.userId
+    );
+
+    res.json(user);
+
+  } catch (error) {
+
+    res.status(500).json(error);
+
   }
 
 };

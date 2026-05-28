@@ -58,7 +58,24 @@ export class AuthService {
       data
     );
   }
+
+  getProfile() {
+
+    const token =
+      localStorage.getItem("token");
+
+    const headers = {
+      Authorization: token || ''
+    };
+
+    return this.http.get(
+      `${this.api}/profile`,
+      { headers }
+    );
+
+  }
 }
+
 
 
 
