@@ -12,7 +12,7 @@ import {
 import { Router } from '@angular/router';
 
 import { AuthService }
-from 'src/app/services/auth';
+  from 'src/app/services/auth';
 
 @Component({
   selector: 'app-login',
@@ -35,7 +35,7 @@ export class LoginPage implements OnInit {
     private fb: FormBuilder,
     private auth: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
 
@@ -63,7 +63,7 @@ export class LoginPage implements OnInit {
 
   login() {
 
-    if(this.loginForm.invalid) {
+    if (this.loginForm.invalid) {
 
       this.loginForm.markAllAsTouched();
 
@@ -79,7 +79,7 @@ export class LoginPage implements OnInit {
       .login(this.loginForm.value)
       .subscribe({
 
-        next: (res:any) => {
+        next: (res: any) => {
 
           console.log(res);
 
@@ -89,13 +89,19 @@ export class LoginPage implements OnInit {
           );
 
           localStorage.setItem(
+            'role',
+            res.role
+          );
+
+          localStorage.setItem(
             'profileCompleted',
             res.profileCompleted
           );
 
+
           this.loading = false;
 
-          if(res.profileCompleted) {
+          if (res.profileCompleted) {
 
             this.router.navigate(['/home']);
 

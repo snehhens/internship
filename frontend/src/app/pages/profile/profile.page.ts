@@ -12,7 +12,7 @@ import {
 import { Router } from '@angular/router';
 
 import { AuthService }
-from 'src/app/services/auth';
+  from 'src/app/services/auth';
 
 @Component({
   selector: 'app-profile',
@@ -25,6 +25,8 @@ export class ProfilePage implements OnInit {
 
   profileForm!: FormGroup;
 
+  role = '';
+
   loading = false;
 
   errorMessage = '';
@@ -33,12 +35,20 @@ export class ProfilePage implements OnInit {
     private fb: FormBuilder,
     private auth: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
 
     const savedEmail =
       localStorage.getItem('email');
+
+    this.role =
+      localStorage.getItem('role') || '';
+
+    console.log(
+      'Current Role:',
+      this.role
+    );
 
     this.profileForm = this.fb.group({
 
@@ -79,15 +89,33 @@ export class ProfilePage implements OnInit {
         ]
       ],
 
-      followers: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(
-            '^[0-9]+$'
-          )
-        ]
-      ]
+      instagramFollowers: [''],
+
+      youtube: [''],
+
+      youtubeFollowers: [''],
+
+      twitter: [''],
+
+      twitterFollowers: [''],
+
+      country: [''],
+
+      category: [''],
+
+      website: [''],
+
+      industry: [''],
+
+      budgetMin: [''],
+      budgetMax: [''],
+
+      brandDescription: [''],
+
+      firstName: [''],
+
+      lastName: [''],
+
 
     });
 
@@ -95,13 +123,8 @@ export class ProfilePage implements OnInit {
 
   saveProfile() {
 
-    if(this.profileForm.invalid) {
+  
 
-      this.profileForm.markAllAsTouched();
-
-      return;
-
-    }
 
     this.loading = true;
 
@@ -113,7 +136,7 @@ export class ProfilePage implements OnInit {
       )
       .subscribe({
 
-        next: (res:any) => {
+        next: (res: any) => {
 
           console.log(res);
 

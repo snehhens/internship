@@ -222,6 +222,7 @@ exports.login = async (req, res) => {
     res.json({
       message: "Login Successful",
       token,
+      role: user.role,
       profileCompleted: user.profileCompleted
     });
 
